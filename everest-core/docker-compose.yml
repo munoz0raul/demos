@@ -1,0 +1,33 @@
+# /everest/docker-compose.yml
+version: "3"
+services:
+  mqtt-server:
+    image: hub.foundries.io/${FACTORY}/eclipse-mosquitto:latest
+    network_mode: "host"
+    restart: always
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+  ocpp-db:
+    image: hub.foundries.io/${FACTORY}/mariadb:latest
+    volumes:
+      - ocpp-db-data:/var/lib/mysql
+    network_mode: "host"
+    restart: always
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: ocpp-db
+      MYSQL_USER: ocpp
+      MYSQL_PASSWORD: ocpp
+  everest:
+    image: hub.foundries.io/${FACTORY}/everest-core:latest
+    network_mode: "host"
+    restart: always
+    depends_on:
+      - mqtt-server
+
+volumes:
+  ocpp-db-data:
+    external: false
+  node-red-data:
+    external: false
+

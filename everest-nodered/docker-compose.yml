@@ -1,0 +1,9 @@
+# /everest-nodered/docker-compose.yml
+version: "3"
+services:
+  everest-nodered:
+    image: hub.foundries.io/${FACTORY}/everest-nodered:latest
+    network_mode: "host"
+    restart: always
+    volumes:
+      - ./config-sil-flow.json:/data/flows.json
